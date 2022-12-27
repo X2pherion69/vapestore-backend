@@ -17,7 +17,6 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             database: 'db',
             keepConnectionAlive: true,
             entities: [Product],
-            synchronize: true,
         };
     }
 }
