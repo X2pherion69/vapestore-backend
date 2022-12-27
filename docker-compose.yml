@@ -1,22 +1,30 @@
 version: '3.8'
 services:
-  vapestore-backend:
-    build:
-      dockerfile: Dockerfile
-      context: .
-    depends_on:
-      - postgres
-    environment:
-      DATABASE_URL: postgres://user:password@postgres:5432/db
-      NODE_ENV: development
-      PORT: 3001
-    ports:
-      - "8080:3001"
-  postgres:
+  postgresql:
+    container_name: postgresql
     image: postgres:14.5
     ports:
-      - "35000:5432"
+      - "5432:5432"
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: db
+      NODE_ENV: development
+  
+  flyway:
+    image: flyway/flyway
+    container_name: flyway
+    depends_on: 
+     - postgresql
+    volumes:
+      - ".:/flyway/sql"
+    command: -url=jdbc:postgresql://postgresql/db -user="user" -password="password" -mixed="true" -connectRetries=60 migrate
+
+  vapestore_backend:
+    build: .
+    container_name: vapestore_backend
+    depends_on:
+      - postgresql
+    ports:
+      - "4000:4000"
+    restart: always

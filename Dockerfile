@@ -1,10 +1,10 @@
 FROM node:16
 
 # Create app dir, this is container/in our image
-WORKDIR /vapestore/src/app
+WORKDIR /app
 
 # Install dependencies 
-COPY package*.json ./
+COPY ./package*.json ./
 
 # Initiate install dependencies
 RUN yarn install
@@ -13,6 +13,4 @@ COPY . .
 
 RUN yarn run build
 
-EXPOSE 8432
-
-CMD ["node", "dist/main"]
+CMD ["node", "dist/main","npm", "run"]
