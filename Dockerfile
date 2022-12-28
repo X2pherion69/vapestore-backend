@@ -13,4 +13,4 @@ COPY . .
 
 RUN yarn run build
 
-CMD ["node", "dist/main","npm", "run"]
+CMD ["npm", "start"]

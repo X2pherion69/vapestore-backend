@@ -2,13 +2,15 @@ version: '3.8'
 services:
   postgresql:
     container_name: postgresql
-    image: postgres:14.5
+    image: postgres:13
     ports:
       - "5432:5432"
+    volumes:
+      - ./.docker/postgre-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: db
+      POSTGRES_DB: postgres
       NODE_ENV: development
   
   flyway:
@@ -18,11 +20,14 @@ services:
      - postgresql
     volumes:
       - ".:/flyway/sql"
-    command: -url=jdbc:postgresql://postgresql/db -user="user" -password="password" -mixed="true" -connectRetries=60 migrate
+    command: -url=jdbc:postgresql://postgresql:5432/postgres -user="user" -password="password" -mixed="true" -connectRetries=60 migrate
 
   vapestore_backend:
     build: .
     container_name: vapestore_backend
+    volumes:
+      - .:/app
+      - /app/node_modules
     depends_on:
       - postgresql
     ports:

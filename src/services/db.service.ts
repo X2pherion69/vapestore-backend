@@ -14,7 +14,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             port: 5432,
             username: 'user',
             password: 'password',
-            database: 'db',
+            database: 'postgres',
             keepConnectionAlive: true,
             entities: [Product],
         };

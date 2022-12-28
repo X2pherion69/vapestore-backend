@@ -17,7 +17,7 @@ export class ProductController {
     @Get('/')
     @ApiResponse({ status: 200, type: ProductsListResponseSwagger })
     @serialize(ProductsListResponsePayload)
-    async getListProducts(@Res() res: Response) {
+    async getListProducts(@Res() res: Response): Promise<ResponseInterface<Product[]>> {
         let products: Product[];
         try {
             products = await this.productService.getAllProducts();
@@ -25,7 +25,7 @@ export class ProductController {
         } catch (err) {
             throw err;
         }
-        res.status(200).send(products);
+        return { data: products, res };
     }
 
     @Post('/')
