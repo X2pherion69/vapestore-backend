@@ -1,3 +1,5 @@
 node_modules/
 dist/
 .docker/
+yarn.lock
+package-lock.json
