@@ -1,16 +1,16 @@
-FROM node:16
+FROM node:16-alpine
 
 # Create app dir, this is container/in our image
 WORKDIR /app
 
+COPY ./tsconfig.build.json .
+
 # Install dependencies 
-COPY ./package*.json ./
+COPY . .
 
 # Initiate install dependencies
 RUN yarn install
 
-COPY . .
-
 RUN yarn run build
 
-CMD ["npm", "start"]
+CMD ["yarn", "run", "start:dev"]

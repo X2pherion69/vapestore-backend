@@ -2,7 +2,7 @@ version: '3.8'
 services:
   postgresql:
     container_name: postgresql
-    image: postgres:13
+    image: postgres:13-alpine
     ports:
       - "5432:5432"
     volumes:
@@ -10,16 +10,17 @@ services:
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: postgres
+      POSTGRES_DATABASE: postgres
       NODE_ENV: development
-  
+    restart: unless-stopped
+
   flyway:
     image: flyway/flyway
     container_name: flyway
-    depends_on: 
+    depends_on:
      - postgresql
     volumes:
-      - ".:/flyway/sql"
+      - "./src/sql:/flyway/sql"
     command: -url=jdbc:postgresql://postgresql:5432/postgres -user="user" -password="password" -mixed="true" -connectRetries=60 migrate
 
   vapestore_backend:
@@ -33,3 +34,46 @@ services:
     ports:
       - "4000:4000"
     restart: always
+
+  db_keycloak:
+    container_name: db_keycloak
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_ROOT_PASSWORD: 12345678x@X
+      POSTGRES_DATABASE: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./.docker/postgres_data_keycloak:/var/lib/postgresql/db
+    ports:
+      - "5433:5433"
+    restart: unless-stopped
+
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:16.1.0
+    command: -b 0.0.0.0 -Dkeycloack.profile=preview
+    restart: on-failure
+    environment:
+      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/keycloak-server.crt.pem
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/conf/keycloak-server.key.pem
+      PROXY_ADDRESS_FORWARDING: "true"
+      DB_VENDOR: postgres
+      DB_ADDR: db_keycloak
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: password
+      REDIRECT_SOCKET: "proxy-https"
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "connectTimeout=30000"
+    volumes:
+      - ./.docker/keycloak-server.crt.pem:/opt/keycloak/conf/keycloak-server.crt.pem
+      - ./.docker/keycloak-server.key.pem:/opt/keycloak/conf/keycloak-server.key.pem
+    ports:
+      - "9990:9990"
+      - "9090:8080"
+      - "8443:8443"
+    depends_on:
+      - db_keycloak
