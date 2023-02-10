@@ -3,3 +3,5 @@ dist/
 .docker/
 yarn.lock
 package-lock.json
+IdentityService/.docker/*
+IdentityService/db/*
