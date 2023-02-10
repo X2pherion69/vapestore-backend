@@ -1,38 +1,49 @@
-version: '3'
-
-volumes:
-  postgres_data:
-      driver: local
+version: '3.9'
 
 services:
-  postgres:
-      image: postgres
-      volumes:
-        - postgres_data:/var/lib/postgresql/data
-      environment:
-        POSTGRES_DB: keycloak
-        POSTGRES_USER: keycloak
-        POSTGRES_PASSWORD: password
-      ports:
-        - 3306:3306
-  keycloak:
-      image: quay.io/keycloak/keycloak:19.0.0
-      command: start-dev
-      restart: on-failure
-      environment:
-        DB_VENDOR: POSTGRES
-        DB_ADDR: postgres
-        DB_DATABASE: keycloak
-        DB_USER: keycloak
-        DB_SCHEMA: public
-        DB_PASSWORD: password
-        KEYCLOAK_USER: admin
-        KEYCLOAK_PASSWORD: password
-        KEYCLOAK_ADMIN: admin
-        KEYCLOAK_ADMIN_PASSWORD: password
-        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
-        #JDBC_PARAMS: "ssl=true"
-      ports:
-        - 8080:8080
-      depends_on:
-        - postgres
+
+  mysql-kc:
+    image: mysql:8.0.27
+    ports:
+      - 3366:3306
+    restart: unless-stopped
+    environment:
+      # The user, password and database that Keycloak
+      # is going to create and use
+      MYSQL_USER: kcuser
+      MYSQL_PASSWORD: kcpassword
+      MYSQL_DATABASE: kcdb
+      # Self-Explanatory
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - keycloak-and-mysql-volume:/var/lib/mysql
+    networks:
+      - keycloak-and-mysql-network
+
+  keycloak-w:
+    image: quay.io/keycloak/keycloak:20.0.3
+    ports:
+      - 8081:8080
+    restart: unless-stopped
+    command: start-dev
+    environment:
+      # User and password for the Administration Console
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+      DB_VENDOR: mysql
+      DB_ADDR: mysql-kc
+      DB_PORT: 3306
+      # Same values as the mysql-kc service
+      DB_USER: kcuser
+      DB_PASSWORD: kcpassword
+      DB_DATABASE: kcdb
+    depends_on:
+      - mysql-kc
+    networks:
+      - keycloak-and-mysql-network
+
+networks:
+  keycloak-and-mysql-network:
+
+volumes:
+  keycloak-and-mysql-volume:
