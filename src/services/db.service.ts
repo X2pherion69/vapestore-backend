@@ -1,22 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { Product } from 'src/models';
+import { Category, Comment, Image, Product, Users } from 'src/models';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
-    constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly configService: ConfigService) {}
 
-    createTypeOrmOptions(): TypeOrmModuleOptions {
-        return {
-            type: 'postgres',
-            host: 'postgresql',
-            port: 5432,
-            username: 'user',
-            password: 'password',
-            database: 'postgres',
-            keepConnectionAlive: true,
-            entities: [Product],
-        };
-    }
+  createTypeOrmOptions(): TypeOrmModuleOptions {
+    return {
+      type: 'postgres',
+      host: 'postgresql',
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      keepConnectionAlive: true,
+      entities: [Product, Comment, Image, Category, Users],
+    };
+  }
 }

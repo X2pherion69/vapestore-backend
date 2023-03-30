@@ -1,50 +1,61 @@
 version: '3.9'
 
 services:
+    mysql-kc:
+        image: mysql:8.0.27
+        ports:
+            - 3366:3306
+        restart: unless-stopped
+        environment:
+            # The user, password and database that Keycloak
+            # is going to create and use
+            MYSQL_USER: kcuser
+            MYSQL_PASSWORD: kcpassword
+            MYSQL_DATABASE: kcdb
+            # Self-Explanatory
+            MYSQL_ROOT_PASSWORD: root_password
+        volumes:
+            - keycloak-and-mysql-volume:/var/lib/mysql
+        networks:
+            - kc-network
 
-  mysql-kc:
-    image: mysql:8.0.27
-    ports:
-      - 3366:3306
-    restart: unless-stopped
-    environment:
-      # The user, password and database that Keycloak
-      # is going to create and use
-      MYSQL_USER: kcuser
-      MYSQL_PASSWORD: kcpassword
-      MYSQL_DATABASE: kcdb
-      # Self-Explanatory
-      MYSQL_ROOT_PASSWORD: root_password
-    volumes:
-      - keycloak-and-mysql-volume:/var/lib/mysql
-    networks:
-      - keycloak-and-mysql-network
-
-  keycloak-w:
-    image: quay.io/keycloak/keycloak:20.0.3
-    ports:
-      - 8081:8080
-    restart: unless-stopped
-    command: start-dev
-    environment:
-      # User and password for the Administration Console
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: password
-      DB_VENDOR: mysql
-      DB_ADDR: mysql-kc
-      DB_PORT: 3306
-      # Same values as the mysql-kc service
-      DB_USER: kcuser
-      DB_PASSWORD: kcpassword
-      DB_DATABASE: kcdb
-    depends_on:
-      mysql-kc:
-        condition: service_started
-    networks:
-      - keycloak-and-mysql-network
+    keycloak-w:
+        container_name: keycloak
+        image: quay.io/keycloak/keycloak:20.0.3
+        restart: unless-stopped
+        ports:
+            - 8081:8080
+        volumes:
+            - ./themes:/opt/keycloak/themes
+            - ./realm-export.json:/opt/keycloak/data/import/realm-export.json
+        command:
+            - start-dev
+            - --import-realm
+        environment:
+            # User and password for the Administration Console
+            KEYCLOAK_ADMIN: admin
+            KEYCLOAK_ADMIN_PASSWORD: password
+            DB_VENDOR: mysql
+            DB_ADDR: mysql-kc
+            DB_PORT: 3306
+            # Same values as the mysql-kc service
+            DB_USER: kcuser
+            DB_PASSWORD: kcpassword
+            DB_DATABASE: kcdb
+        depends_on:
+            mysql-kc:
+                condition: service_started
+        networks:
+            - kc-network
+            - vape-network
 
 networks:
-  keycloak-and-mysql-network:
+    vape-network:
+        name: vape-network
+        driver: bridge
+        external: true
+    kc-network:
+        external: false
 
 volumes:
-  keycloak-and-mysql-volume:
+    keycloak-and-mysql-volume:

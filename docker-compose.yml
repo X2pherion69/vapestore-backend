@@ -1,37 +1,57 @@
-version: '3.8'
+version: '3'
 services:
   postgresql:
     container_name: postgresql
     image: postgres:13-alpine
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./.docker/postgre-data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DATABASE: postgres
-      NODE_ENV: development
     restart: unless-stopped
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_ROOT_PASSWORD=lmao
+    ports:
+      - 5432:5432
+    volumes:
+      - ./.docker/postgres_data:/var/lib/postgresql/db
+    networks:
+      - vape-service
 
   flyway:
-    image: flyway/flyway
     container_name: flyway
+    image: flyway/flyway
     depends_on:
-     - postgresql
+      - postgresql
     volumes:
-      - "./src/sql:/flyway/sql"
+      - './sql:/flyway/sql'
     command: -url=jdbc:postgresql://postgresql:5432/postgres -user="user" -password="password" -mixed="true" -connectRetries=60 migrate
+    networks:
+      - vape-service
 
   vapestore_backend:
-    build: .
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
     container_name: vapestore_backend
+    command: sh -c "yarn install && yarn start:dev"
+    environment:
+      NODE_ENV: development
+      PORT: 4000
     volumes:
       - .:/app
       - /app/node_modules
     depends_on:
       - postgresql
     ports:
-      - "4000:4000"
-    restart: always
+      - '4000:4000'
+    networks:
+      - vape-network
+      - vape-service
 
+networks:
+  vape-service:
+    name: vape-service
+    external: false
+  vape-network:
+    name: vape-network
+    driver: bridge

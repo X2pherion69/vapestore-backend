@@ -1,32 +1,62 @@
-import { Column, Entity } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Exclude, Expose, instanceToPlain } from 'class-transformer';
+import { Comment } from './comment.entity';
+import { Image } from './image.entity';
+import { Category } from './category.entity';
 
-@Entity({ name: 'product' })
+@Entity()
 export class Product extends BaseEntity {
-    @ApiProperty({ description: 'Name' })
-    @Column({ nullable: false, name: 'name' })
-    @Expose()
-    name: string;
+  @Column({ type: 'varchar', nullable: false })
+  @Expose()
+  name: string;
 
-    @ApiProperty({ description: 'Price' })
-    @Column({ nullable: false, name: 'price' })
-    @Expose()
-    price: number;
+  @Column({ type: 'decimal', nullable: false, default: 0 })
+  @Expose()
+  price: number;
 
-    @ApiProperty({ description: 'Brand' })
-    @Column({ nullable: false, name: 'brand' })
-    @Expose()
-    brand: string;
+  @Column({ type: 'varchar', nullable: true })
+  @Expose()
+  type: string;
 
-    @ApiProperty({ description: 'Status' })
-    @Column({ nullable: false, name: 'status' })
-    @Expose()
-    status: string;
+  @Column({ type: 'varchar', nullable: true })
+  @Expose()
+  origin: string;
 
-    @ApiProperty({ description: 'Nicotin' })
-    @Column({ nullable: false, name: 'nicotin' })
-    @Expose()
-    nicotin: number;
+  @Column({ type: 'varchar', nullable: false })
+  @Expose()
+  description: string;
+
+  @Column({ type: 'decimal', nullable: false })
+  @Expose()
+  nicotine: number;
+
+  @Column({ type: 'decimal', nullable: false })
+  @Expose()
+  volume: number;
+
+  @Column({ type: 'int', nullable: false })
+  @Expose()
+  quantity: number;
+
+  @OneToMany(() => Comment, (comment) => comment.product, { cascade: true })
+  @Expose()
+  comment: Comment[];
+
+  @OneToMany(() => Image, (image) => image.product, { cascade: true })
+  @Expose()
+  image: Image[];
+
+  @ManyToOne(() => Category, { nullable: false })
+  @JoinColumn({ name: 'category_id' })
+  @Expose()
+  category: Category;
+
+  @Column({ type: 'bigint', name: 'category_id' })
+  @Exclude({ toPlainOnly: true })
+  categoryId: number;
+
+  toJSON() {
+    return instanceToPlain(this);
+  }
 }

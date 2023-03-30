@@ -1,16 +1,24 @@
-FROM node:16-alpine
+FROM node AS development
 
-# Create app dir, this is container/in our image
 WORKDIR /app
 
-COPY ./tsconfig.build.json .
+COPY package*.json ./
 
-# Install dependencies 
-COPY . .
-
-# Initiate install dependencies
 RUN yarn install
 
-RUN yarn run build
+COPY . .
 
-CMD ["yarn", "run", "start:dev"]
+RUN yarn build
+
+FROM node AS production
+
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /app
+
+COPY --from=development /app .
+
+EXPOSE 4000
+
+CMD ["yarn", "start:prod"]

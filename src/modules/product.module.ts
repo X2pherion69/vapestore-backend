@@ -1,15 +1,14 @@
-import { ProductController } from 'src/controllers';
-import { ProductRepository } from 'src/repositories';
-import { ProductService } from 'src/services';
-import { Connection } from 'typeorm';
-import { Product } from 'src/models';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProductController } from 'src/controllers/product.controller';
+import { ProductService } from 'src/services/product.service';
+import { Product } from 'src/models/product.entity';
+import { Category, Comment, Image } from 'src/models';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Product])],
-    controllers: [ProductController],
-    providers: [ProductService, { provide: ProductRepository, useFactory: (connection: Connection) => connection.getCustomRepository(ProductRepository), inject: [Connection] }],
-    exports: [ProductService, ProductRepository],
+  imports: [TypeOrmModule.forFeature([Product, Image, Category, Comment])],
+  controllers: [ProductController],
+  providers: [ProductService],
+  exports: [ProductService],
 })
 export class ProductModule {}

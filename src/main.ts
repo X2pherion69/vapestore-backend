@@ -1,15 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
-    app.setGlobalPrefix('/api');
-    app.enableCors({ origin: 'http://localhost:3000', preflightContinue: false, credentials: true, methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS', optionsSuccessStatus: 204 });
-    const configSwagger = new DocumentBuilder().setTitle('Vapestore API').setDescription('The APIs for vapestore').setVersion('1.0').build();
-
-    const document = SwaggerModule.createDocument(app, configSwagger);
-    SwaggerModule.setup('api/explorer', app, document);
-    await app.listen(4000);
+  const app = await NestFactory.create(AppModule);
+  /**
+   * Make all apis have prefix with /api
+   * Exp: http://host:port/api/auth/login
+   */
+  app.setGlobalPrefix('/api');
+  app.enableCors({
+    origin: [process.env.FE_BASE_URL, process.env.KEYCLOAK_AUTH_URI],
+    preflightContinue: false,
+    credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    optionsSuccessStatus: 204,
+  });
+  await app.listen(process.env.API_PORT);
 }
 bootstrap();
