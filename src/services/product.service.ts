@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateProductDto, FilterProductDto } from 'src/dtos';
-import { httpError } from 'src/exception/httpErrors';
-import { PagingResult } from 'src/interfaces';
-import { Category, Comment, Image, Product } from 'src/models';
-import { checkImageName } from 'src/utils';
+import { CreateProductDto, FilterProductDto } from '../dtos';
+import { httpError } from '../exception/httpErrors';
+import { PagingResult } from '../interfaces';
+import { Category, Comment, Image, Product } from '../models';
+import { checkImageName } from '../utils';
 import { Repository } from 'typeorm';
 
 @Injectable()

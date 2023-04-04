@@ -1,4 +1,4 @@
-import { ErrorMessageEnum, ErrorMessageDetailEnum } from 'src/enum/error.enum';
+import { ErrorMessageEnum, ErrorMessageDetailEnum } from '../../enum/error.enum';
 
 export interface ErrorBody {
   errorMessage: ErrorMessageEnum;

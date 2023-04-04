@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Param, Post, Patch, UsePipes, Delete, Res, ParseIntPipe } from '@nestjs/common';
-import { httpError } from 'src/exception/httpErrors';
+import { httpError } from '../exception/httpErrors';
 import { StatusCodes } from 'http-status-codes';
-import { CommentService } from 'src/services';
-import { PagingResult } from 'src/interfaces';
-import { Comment } from 'src/models';
-import { CreateCommentDto, vCreateCommentDto } from 'src/dtos';
+import { CommentService } from '../services';
+import { PagingResult } from '../interfaces';
+import { Comment } from '../models';
+import { CreateCommentDto, vCreateCommentDto } from '../dtos';
 import { QueryJoiValidatorPipe } from '../pipes/queryValidator.pipe';
-import { UpdateCommentDto, vDeleteCommentDto, vUpdateCommentDto } from 'src/dtos/update-comment.dto';
+import { UpdateCommentDto, vDeleteCommentDto, vUpdateCommentDto } from '../dtos/update-comment.dto';
 import { Response } from 'express';
 import { Unprotected } from 'nest-keycloak-connect';
 

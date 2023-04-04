@@ -3,6 +3,9 @@ services:
   postgresql:
     container_name: postgresql
     image: postgres:13-alpine
+    cpus: 1
+    cpu_count: 1
+    mem_limit: 2g
     restart: unless-stopped
     environment:
       - POSTGRES_DB=postgres
@@ -19,6 +22,9 @@ services:
   flyway:
     container_name: flyway
     image: flyway/flyway
+    mem_limit: 256mb
+    cpus: 0.3
+    cpu_count: 1
     depends_on:
       - postgresql
     volumes:
@@ -28,12 +34,11 @@ services:
       - vape-service
 
   vapestore_backend:
-    build:
-      dockerfile: Dockerfile
-      context: .
-      target: development
-    image: x2pher69/vapestore_backend:latest
     container_name: vapestore_backend
+    image: x2pher69/vapestore_backend:latest
+    cpus: 2
+    cpu_count: 1
+    mem_limit: 2g
     command: sh -c "yarn install && yarn start:dev"
     environment:
       NODE_ENV: development

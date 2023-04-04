@@ -1,11 +1,11 @@
 import { Body, Controller, Get, HttpCode, Post, Param, Put, Res, Headers } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
 import { Unprotected } from 'nest-keycloak-connect';
-import { CreateUserDto, LoginDTO } from 'src/dtos';
-import { KeycloakToken, KeycloakUserInfo } from 'src/models';
-import { AuthService } from 'src/services';
+import { CreateUserDto, LoginDTO } from '../dtos';
+import { KeycloakToken, KeycloakUserInfo } from '../models';
+import { AuthService } from '../services';
 import { Response } from 'express';
-import { httpError } from 'src/exception/httpErrors';
+import { httpError } from '../exception/httpErrors';
 
 @Controller('auth')
 export class AuthController {

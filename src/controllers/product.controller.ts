@@ -16,14 +16,14 @@ import {
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
-import { ProductService } from 'src/services/product.service';
-import { CreateProductDto, vCreateProductDto, UpdateProductDto, vUpdateProductDto, vFilterProductDto, FilterProductDto } from 'src/dtos';
+import { ProductService } from '../services/product.service';
+import { CreateProductDto, vCreateProductDto, UpdateProductDto, vUpdateProductDto, vFilterProductDto, FilterProductDto } from '../dtos';
 import { Unprotected } from 'nest-keycloak-connect';
-import { PagingResult } from 'src/interfaces';
-import { Image, Product } from 'src/models';
+import { PagingResult } from '../interfaces';
+import { Image, Product } from '../models';
 import { StatusCodes } from 'http-status-codes';
 import { QueryJoiValidatorPipe } from '../pipes/queryValidator.pipe';
-import { httpError } from 'src/exception/httpErrors';
+import { httpError } from '../exception/httpErrors';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -34,7 +34,7 @@ export class ProductController {
   @Unprotected()
   @Get('/')
   @UsePipes(new QueryJoiValidatorPipe(vFilterProductDto))
-  async listProducts(@Res() res: Response, @Query() query: FilterProductDto): Promise<Response<PagingResult<Product>>> {
+  async listProducts(@Res() res: Response, @Query() query?: FilterProductDto): Promise<Response<PagingResult<Product>>> {
     let products: PagingResult<Product>;
     try {
       products = await this.productService.getAllProduct(query);
@@ -47,7 +47,7 @@ export class ProductController {
   @Unprotected()
   @Post('/')
   @UsePipes(new QueryJoiValidatorPipe(vCreateProductDto))
-  async createProduct(@Body() body: CreateProductDto, @Res() res: Response): Promise<Response<Product>> {
+  async createProduct(@Body() body: CreateProductDto, @Res() res: Partial<Response>): Promise<Response<Product>> {
     let product: Product;
     try {
       product = await this.productService.createProduct(body);

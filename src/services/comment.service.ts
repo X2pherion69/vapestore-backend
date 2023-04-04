@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateCommentDto } from 'src/dtos';
-import { httpError } from 'src/exception/httpErrors';
-import { PagingResult } from 'src/interfaces';
-import { Comment } from 'src/models';
+import { CreateCommentDto } from '../dtos';
+import { httpError } from '../exception/httpErrors';
+import { PagingResult } from '../interfaces';
+import { Comment } from '../models';
 import { Repository } from 'typeorm';
 
 @Injectable()

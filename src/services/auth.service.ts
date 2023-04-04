@@ -2,9 +2,9 @@ import { HttpException, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as queryString from 'querystring';
 import { catchError, map } from 'rxjs/operators';
-import { KeycloakToken, KeycloakUserInfo as KeycloakUserInfoInterface } from 'src/models';
+import { KeycloakToken, KeycloakUserInfo as KeycloakUserInfoInterface } from '../models';
 import { HttpService } from '@nestjs/axios';
-import { CreateUserDto, LoginDTO } from 'src/dtos';
+import { CreateUserDto, LoginDTO } from '../dtos';
 import { Observable } from 'rxjs';
 import { Cron } from '@nestjs/schedule';
 

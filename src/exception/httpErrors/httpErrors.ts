@@ -1,7 +1,7 @@
 import { HttpException } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
 import { exceptionResponse } from '../interface';
-import { ErrorMessageDetailEnum, ErrorMessageEnum } from 'src/enum/error.enum';
+import { ErrorMessageDetailEnum, ErrorMessageEnum } from '../../enum/error.enum';
 
 class HttpError {
   public throwInternalServerError(errorLog?: any) {

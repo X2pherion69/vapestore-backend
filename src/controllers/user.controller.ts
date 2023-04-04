@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Param, Delete, Patch, Res, ParseIntPipe } from '@nestjs/common';
-import { UserService } from 'src/services/user.service';
-import { CreateUserDto, UpdateUserDto } from 'src/dtos';
+import { UserService } from '../services/user.service';
+import { CreateUserDto, UpdateUserDto } from '../dtos';
 import { Unprotected } from 'nest-keycloak-connect';
 import { StatusCodes } from 'http-status-codes';
-import { httpError } from 'src/exception/httpErrors';
+import { httpError } from '../exception/httpErrors';
 import { Response } from 'express';
-import { Users } from 'src/models/user.entity';
+import { Users } from '../models/user.entity';
 
 @Controller('user')
 export class UserController {
