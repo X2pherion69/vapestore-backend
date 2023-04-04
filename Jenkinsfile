@@ -3,7 +3,7 @@ node {
     checkout scm
   }
   stage('SonarQube Analysis') {
-    def scannerHome = tool 'BitbucketVapebeSonar';
+    def scannerHome = tool 'GithubVape';
     withSonarQubeEnv() {
       sh "${scannerHome}/bin/sonar-scanner"
     }
