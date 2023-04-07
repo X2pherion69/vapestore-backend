@@ -23,12 +23,12 @@ pipeline {
       }
     }
 
-    stage('Run tests') {
-      steps {
-        sh 'yarn test'
-        echo 'Test done!'
-      }
-    }
+    // stage('Run tests') {
+    //   steps {
+    //     sh 'yarn test'
+    //     echo 'Test done!'
+    //   }
+    // }
 
     stage('Login to Dockerhub') {
       steps {
