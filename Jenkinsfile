@@ -34,38 +34,38 @@ pipeline {
     //   }
     // }
 
-    stage('Login to Dockerhub') {
+    stage('Build image backend services') {
       steps {
-        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-        echo 'Login sucessfully!'
+        sh 'docker compose build'
+        echo 'Build complete!'
       }
     }
 
-    stage('Build image backend services') {
+    stage('Login to Dockerhub') {
       steps {
-        sh 'sudo docker compose build'
-        echo 'Build complete!'
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+        echo 'Login sucessfully!'
       }
     }
 
     stage('Push image to Dockerhub') {
       steps {
-        sh 'sudo docker push'
+        sh 'docker push'
         echo 'Push complete!'
+      }
+    }
+
+    stage('Logout dockerhub') {
+      steps {
+        sh 'docker logout'
+        echo 'Log docker out complete!'
       }
     }
 
     stage('Deployment') {
       steps {
-        sh 'sudo docker compose -f docker-compose.production.yml up -d'
+        sh 'docker compose -f docker-compose.production.yml up -d'
         echo 'Deploy success!'
-      }
-    }
-
-    stage('All settled') {
-      steps {
-        sh 'sudo docker logout'
-        echo 'Log docker out complete!'
       }
     }
   }
