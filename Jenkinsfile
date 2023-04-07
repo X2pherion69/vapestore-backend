@@ -32,35 +32,35 @@ pipeline {
 
     stage('Login to Dockerhub') {
       steps {
-        sh 'docker login -u x2pher69 -p dckr_pat_740cJsk86rA89UzpKaL7nB1DGxQ'
+        sh 'sudo docker login -u x2pher69 -p dckr_pat_740cJsk86rA89UzpKaL7nB1DGxQ'
         echo 'Login sucessfully!'
       }
     }
 
     stage('Build image backend services') {
       steps {
-        sh 'docker compose build'
+        sh 'sudo docker compose build'
         echo 'Build complete!'
       }
     }
 
     stage('Push image to Dockerhub') {
       steps {
-        sh 'docker push'
+        sh 'sudo docker push'
         echo 'Push complete!'
       }
     }
 
     stage('Deployment') {
       steps {
-        sh 'docker compose -f docker-compose.production.yml up -d'
+        sh 'sudo docker compose -f docker-compose.production.yml up -d'
         echo 'Deploy success!'
       }
     }
 
     stage('All settled') {
       steps {
-        sh 'docker logout'
+        sh 'sudo docker logout'
         echo 'Log docker out complete!'
       }
     }
