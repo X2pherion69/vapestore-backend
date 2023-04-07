@@ -32,7 +32,7 @@ pipeline {
 
     stage('Login to Dockerhub') {
       steps {
-        sh 'docker login -u x2pher69 --password-stdin'
+        sh 'docker login -u x2pher69 -p dckr_pat_740cJsk86rA89UzpKaL7nB1DGxQ'
         echo 'Login sucessfully!'
       }
     }
