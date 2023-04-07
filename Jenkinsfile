@@ -65,7 +65,7 @@ pipeline {
     stage('Deployment') {
       steps {
         sh 'docker compose -f docker-compose.production.yml up -d'
-        echo 'Deploy success!'
+        echo 'Deploy success'
       }
     }
   }
