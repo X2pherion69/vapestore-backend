@@ -50,7 +50,7 @@ pipeline {
 
     stage('Push image to Dockerhub') {
       steps {
-        sh 'docker push'
+        sh 'docker push x2pher69/vapestore_backend:latest'
         echo 'Push complete!'
       }
     }
