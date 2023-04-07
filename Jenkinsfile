@@ -5,6 +5,10 @@ pipeline {
     nodejs 'Nodejs'
   }
 
+  environment {
+    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+  }
+
   stages {
     stage('Sonarqube Analysis') {
       steps {
@@ -32,7 +36,7 @@ pipeline {
 
     stage('Login to Dockerhub') {
       steps {
-        sh 'sudo docker login -u x2pher69 -p dckr_pat_4MnjjsSbwWhMvhXwITTA-roSuNU'
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
         echo 'Login sucessfully!'
       }
     }
