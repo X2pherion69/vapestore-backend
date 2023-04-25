@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ProductService } from './product.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product, Category, Comment, Image } from '../models';
+import { createMock } from '@golevelup/ts-jest';
 
 describe('ProductService', () => {
   let service: ProductService;
@@ -9,20 +10,7 @@ describe('ProductService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [ProductService],
-      imports: [
-        TypeOrmModule.forFeature([Product, Image, Category, Comment]),
-        TypeOrmModule.forRoot({
-          type: 'postgres',
-          host: 'localhost',
-          port: 5432,
-          username: 'user',
-          password: 'password',
-          database: 'postgres',
-          keepConnectionAlive: true,
-          entities: [Product, Comment, Image, Category],
-        }),
-      ],
-    }).compile();
+    }).useMocker(createMock).compile();
 
     service = module.get<ProductService>(ProductService);
   });
