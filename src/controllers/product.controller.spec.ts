@@ -5,6 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category, Image, Product, Comment } from '../models';
 import { CreateProductDto, UpdateProductDto } from 'src/dtos';
 import { Response } from 'express';
+import { ModuleMocker, MockFunctionMetadata } from 'jest-mock';
+import { createMock } from '@golevelup/ts-jest';
+
+const moduleMocker = new ModuleMocker(global)
 
 describe('ProductController', () => {
   let controller: ProductController;
@@ -21,22 +25,8 @@ describe('ProductController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ProductService],
       controllers: [ProductController],
-      imports: [
-        TypeOrmModule.forFeature([Product, Image, Category, Comment]),
-        TypeOrmModule.forRoot({
-          type: 'postgres',
-          host: 'localhost',
-          port: 5432,
-          username: 'user',
-          password: 'password',
-          database: 'postgres',
-          keepConnectionAlive: true,
-          entities: [Product, Comment, Image, Category],
-        }),
-      ],
-    }).compile();
+    }).useMocker(createMock).compile();
 
     controller = module.get<ProductController>(ProductController);
     service = module.get<ProductService>(ProductService);
