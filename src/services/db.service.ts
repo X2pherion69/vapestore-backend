@@ -17,6 +17,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       database: process.env.DB_NAME,
       keepConnectionAlive: true,
       entities: [Product, Comment, Image, Category, Users],
+      retryAttempts: 3,
     };
   }
 }
