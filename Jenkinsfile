@@ -1,7 +1,5 @@
 pipeline {
-  agent {
-    label: 'vapestore-be-slave'
-  }
+  agent any
 
   tools {
     nodejs 'Nodejs'
