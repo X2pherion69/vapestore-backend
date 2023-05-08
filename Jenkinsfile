@@ -12,7 +12,7 @@ pipeline {
   stages {
     stage('Sonarqube Analysis') {
       steps {
-        sh "${WORKSPACE}"
+        sh "${WORKSPACE}/sonar-project.properties"
         build job: "SonarPipeline", wait: true, parameters: [string(name: "TOOL_REPO_NAME", value: "vapestore-backend")]
       }
     }
