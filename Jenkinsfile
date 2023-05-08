@@ -18,7 +18,7 @@ pipeline {
       }
     }
 
-    stage('Install dependencies') {
+    stage('Install dependency') {
       steps {
         sh 'yarn install'
       }
