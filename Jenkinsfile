@@ -12,8 +12,9 @@ pipeline {
   stages {
     stage('Sonarqube Analysis') {
       steps {
-        sh "${WORKSPACE}/sonar-project.properties"
-        build job: "SonarPipeline", wait: true, parameters: [string(name: "TOOL_REPO_NAME", value: "vapestore-backend")]
+        let workspace = WORKSPACE/sonar-project.properties
+        sh "${workspace}"
+        build job: "SonarPipeline", wait: true, parameters: [string(name: "TOOL_REPO_NAME", value: "vapestore-backend"),string(name: "SONAR_CONF"),value: workspace]
       }
     }
 
