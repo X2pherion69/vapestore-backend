@@ -65,7 +65,7 @@ describe('ProductController', () => {
       {
         name: 'product',
         price: 15000,
-        type: 'saltnc',
+        type: 'saltnic',
         volume: 100,
         origin: 'USA',
         quantity: 10,
