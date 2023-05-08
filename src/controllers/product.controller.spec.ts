@@ -1,14 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductController } from './product.controller';
 import { ProductService } from '../services/product.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Category, Image, Product, Comment } from '../models';
+import { Category, Product } from '../models';
 import { CreateProductDto, UpdateProductDto } from 'src/dtos';
 import { Response } from 'express';
-import { ModuleMocker, MockFunctionMetadata } from 'jest-mock';
+import { ModuleMocker } from 'jest-mock';
 import { createMock } from '@golevelup/ts-jest';
 
-const moduleMocker = new ModuleMocker(global)
+const moduleMocker = new ModuleMocker(global);
 
 describe('ProductController', () => {
   let controller: ProductController;
@@ -26,7 +25,9 @@ describe('ProductController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProductController],
-    }).useMocker(createMock).compile();
+    })
+      .useMocker(createMock)
+      .compile();
 
     controller = module.get<ProductController>(ProductController);
     service = module.get<ProductService>(ProductService);

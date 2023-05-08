@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '../dtos';
 import { httpError } from '../exception/httpErrors';
-// import { PagingResult } from '../interfaces';
 import { Users } from '../models/user.entity';
 import { Repository } from 'typeorm';
 
@@ -11,13 +10,6 @@ export class UserService {
   constructor(@InjectRepository(Users) private userRepository: Repository<Users>) {}
 
   private readonly alias = 'Users';
-
-  // async getAllUser(isDeleted = false): Promise<PagingResult<User>> {
-  //     const query = this.userRepository.createQueryBuilder(this.alias).orderBy(`${this.alias}.id`, 'DESC').where(`${this.alias}.is_deleted = :isDeleted`, { isDeleted });
-  //     const data = await query.getMany();
-  //     const count = await query.getCount();
-  //     return { data, count };
-  // }
 
   async createUser(data: CreateUserDto): Promise<Users> {
     if (await this.checkExistEmail(data.email)) {
