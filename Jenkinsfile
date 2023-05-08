@@ -5,6 +5,10 @@ pipeline {
     nodejs 'Nodejs'
   }
 
+  parameters {
+    string(defaultValue: "vapestore-backend", description: "", name: "REPOSITORY_TOOL_NAME")
+  }
+
   environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerhub')
   }
@@ -12,19 +16,8 @@ pipeline {
   stages {
     stage('Sonarqube Analysis') {
       steps {
-        script {
-          def scannerHome = tool 'vapestore-backend'
-          withSonarQubeEnv() {
-            sh "${scannerHome}/bin/sonar-scanner"
-          }
-        }
+        build job: "SonarPipeline", wait: false, parameters: [string(name: "REPO_TOOL_NAME", value: String.valueOf(REPOSITORY_TOOL_NAME))]
       }
-    }
-
-    stage("Quality Gate") { 
-      steps { 
-        timeout(time: 1, unit: 'MINUTES') { waitForQualityGate abortPipeline: true } 
-      } 
     }
 
     stage('Install dependencies') {
