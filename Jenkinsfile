@@ -6,7 +6,7 @@ pipeline {
   }
 
   parameters {
-    string(defaultValue: "vapestore-backend", description: "", name: "REPOSITORY_TOOL_NAME")
+    string(defaultValue: "vapestore-backend", description: "ok", name: "REPOSITORY_TOOL_NAME")
   }
 
   environment {
