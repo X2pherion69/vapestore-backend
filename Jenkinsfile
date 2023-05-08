@@ -16,7 +16,7 @@ pipeline {
   stages {
     stage('Sonarqube Analysis') {
       steps {
-        build job: "SonarPipeline", wait: false, parameters: [string(name: "TOOL_REPO_NAME", value: String.valueOf(REPOSITORY_TOOL_NAME))]
+        build job: "SonarPipeline", wait: yes, parameters: [string(name: "TOOL_REPO_NAME", value: String.valueOf(REPOSITORY_TOOL_NAME))]
       }
     }
 
