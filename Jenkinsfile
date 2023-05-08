@@ -14,11 +14,11 @@ pipeline {
       steps {
         let workspace = WORKSPACE/sonar-project.properties
         sh "${workspace}"
-        build job: "SonarPipeline", wait: true, parameters: [string(name: "TOOL_REPO_NAME", value: "vapestore-backend"),string(name: "SONAR_CONF"),value: workspace]
+        build job: "SonarPipeline", wait: true, parameters: [string(name: "TOOL_REPO_NAME", value: "vapestore-backend"),string(name: "SONAR_CONF",value: workspace)]
       }
     }
 
-    stage('Install dependency') {
+    stage('Install dependencies') {
       steps {
         sh 'yarn install'
       }
