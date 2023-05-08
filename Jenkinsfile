@@ -5,10 +5,6 @@ pipeline {
     nodejs 'Nodejs'
   }
 
-  parameters {
-    string(defaultValue: "vapestore-backend", description: "", name: "REPOSITORY_TOOL_NAME")
-  }
-
   environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerhub')
   }
@@ -16,7 +12,8 @@ pipeline {
   stages {
     stage('Sonarqube Analysis') {
       steps {
-        build job: "SonarPipeline", wait: true, parameters: [string(name: "TOOL_REPO_NAME", value: String.valueOf(REPOSITORY_TOOL_NAME))]
+        sh "${WORKSPACE}"
+        build job: "SonarPipeline", wait: true, parameters: [string(name: "TOOL_REPO_NAME", value: "vapestore-backend")]
       }
     }
 
