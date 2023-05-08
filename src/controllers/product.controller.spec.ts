@@ -64,7 +64,7 @@ describe('ProductController', () => {
   it('should get a list of products', async () => {
     const productResult: Product[] = [
       {
-        name: 'producthihihi',
+        name: 'product',
         price: 15000,
         type: 'saltnic',
         volume: 100,
