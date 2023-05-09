@@ -1,5 +1,5 @@
 pipeline {
-  agent none
+  agent any
 
   tools {
     nodejs 'Nodejs'
@@ -12,8 +12,19 @@ pipeline {
   stages {
     stage('Sonarqube Analysis') {
       steps {
-        build job: "SonarPipeline", wait: true, parameters: [string(name: "TOOL_REPO_NAME", value: "vapestore-backend"),string(name: "SONAR_CONF",value: "${WORKSPACE}/sonar-project.properties")]
+        script {
+          def scannerHome = tool 'vapestore-backend'
+          withSonarQubeEnv() {
+            sh "${scannerHome}/bin/sonar-scanner"
+          }
+        }
       }
+    }
+
+    stage("Quality Gate") { 
+      steps { 
+        timeout(time: 1, unit: 'MINUTES') { waitForQualityGate abortPipeline: true } 
+      } 
     }
 
     stage('Install dependencies') {
