@@ -9,6 +9,19 @@ pipeline {
     DOCKERHUB_CREDENTIALS = credentials('dockerhub')
   }
 
+  post{
+        failure{
+            emailext to: "trannguyenduchuy96@gmail.com",
+            subject: "jenkins build:${currentBuild.currentResult}: ${env.JOB_NAME}",
+            body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}\nMore Info can be found here: ${env.BUILD_URL}"
+        }
+        success{
+            emailext to: "trannguyenduchuy96@gmail.com",
+            subject: "jenkins build:${currentBuild.currentResult}: ${env.JOB_NAME}",
+            body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}\nMore Info can be found here: ${env.BUILD_URL}"
+        }
+    }
+
   stages {
     stage('Sonarqube Analysis') {
       steps {
