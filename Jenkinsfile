@@ -22,18 +22,6 @@ pipeline {
         }
     }
 
-    stages {
-        stage('Deploy to production') {
-      steps {
-        sshagent(credentials:['385f3aa3-e8c6-4336-9b68-50528da00149']) {
-          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 uname -a'
-          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 cd vapestore-backend'
-          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker compose -f docker-compose.production.yml up -d'
-          echo 'connect sucessfully to production'
-        }
-      }
-        }
-
     //     stage('Sonarqube Analysis') {
     //   steps {
     //     script {
@@ -92,11 +80,16 @@ pipeline {
     //   }
     //     }
 
-    //     stage('Deployment') {
-    //   steps {
-    //     sh 'docker compose -f docker-compose.production.yml up -d'
-    //     echo 'Deploy success'
-    //   }
-    //     }
+    stages {
+        stage('Deploy to production') {
+      steps {
+        sshagent(credentials:['385f3aa3-e8c6-4336-9b68-50528da00149']) {
+          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 uname -a'
+          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker compose down'
+          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker compose up -d'
+          echo 'Sucessfully deploy to production'
+        }
+      }
+        }
     }
 }
