@@ -23,6 +23,15 @@ pipeline {
     }
 
   stages {
+    stage('SSH to production') {
+      steps {
+        sshagent(credentials:['385f3aa3-e8c6-4336-9b68-50528da00149']) {
+          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu ubuntu@ec2-54-153-156-197.ap-southeast-2.compute.amazonaws.com uname -a'
+          echo 'connect sucessfully to production'
+        }
+      }
+    }
+
     stage('Sonarqube Analysis') {
       steps {
         script {
@@ -34,10 +43,10 @@ pipeline {
       }
     }
 
-    stage("Quality Gate") { 
-      steps { 
-        timeout(time: 1, unit: 'MINUTES') { waitForQualityGate abortPipeline: true } 
-      } 
+    stage('Quality Gate') {
+      steps {
+        timeout(time: 1, unit: 'MINUTES') { waitForQualityGate abortPipeline: true }
+      }
     }
 
     stage('Install dependencies') {
