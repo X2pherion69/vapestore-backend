@@ -23,10 +23,11 @@ pipeline {
     }
 
     stages {
-        stage('SSH to production') {
+        stage('Deploy to production') {
       steps {
         sshagent(credentials:['385f3aa3-e8c6-4336-9b68-50528da00149']) {
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu ubuntu@ec2-54-153-156-197.ap-southeast-2.compute.amazonaws.com uname -a'
+          sh 'cd vapestore-backend'
           echo 'connect sucessfully to production'
         }
       }
