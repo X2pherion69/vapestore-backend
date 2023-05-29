@@ -28,7 +28,6 @@ pipeline {
         sshagent(credentials:['385f3aa3-e8c6-4336-9b68-50528da00149']) {
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu ubuntu@ec2-54-153-156-197.ap-southeast-2.compute.amazonaws.com uname -a'
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu ubuntu@ec2-54-153-156-197.ap-southeast-2.compute.amazonaws.com cd vapestore-backend'
-          sh 'cd vapestore-backend'
           echo 'connect sucessfully to production'
         }
       }
