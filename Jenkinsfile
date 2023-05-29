@@ -84,12 +84,12 @@ pipeline {
         }
       }
         }
-    }
 
-    stage('Logout dockerhub') {
+        stage('Logout dockerhub') {
       steps {
         sh 'docker logout'
         echo 'Log docker out complete!'
       }
+        }
     }
 }
