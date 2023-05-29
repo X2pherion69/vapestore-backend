@@ -21,7 +21,7 @@ pipeline {
             body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}\nMore Info can be found here: ${env.BUILD_URL}"
         }
     }
-
+    stages {
     ///     stage('Sonarqube Analysis') {
     //   steps {
     //     script {
@@ -59,12 +59,12 @@ pipeline {
     //   }
     //     }
 
-    //     stage('Login to Dockerhub') {
-    //   steps {
-    //     sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-    //     echo 'Login sucessfully!'
-    //   }
-    //     }
+    stage('Login to Dockerhub') {
+      steps {
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+        echo 'Login sucessfully!'
+      }
+    }
 
     //     stage('Push image to Dockerhub') {
     //   steps {
@@ -73,25 +73,23 @@ pipeline {
     //   }
     //     }
 
-    //     stage('Logout dockerhub') {
-    //   steps {
-    //     sh 'docker logout'
-    //     echo 'Log docker out complete!'
-    //   }
-    //     }
-
-    stages {
         stage('Deploy to production') {
       steps {
         sshagent(credentials:['385f3aa3-e8c6-4336-9b68-50528da00149']) {
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 uname -a'
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker-compose down'
-          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker-compose up -d'
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker logout'
           echo 'Sucessfully deploy to production'
         }
       }
         }
+    }
+
+    stage('Logout dockerhub') {
+      steps {
+        sh 'docker logout'
+        echo 'Log docker out complete!'
+      }
     }
 }
