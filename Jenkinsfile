@@ -22,7 +22,7 @@ pipeline {
         }
     }
 
-    //     stage('Sonarqube Analysis') {
+    ///     stage('Sonarqube Analysis') {
     //   steps {
     //     script {
     //       def scannerHome = tool 'vapestore-backend'
