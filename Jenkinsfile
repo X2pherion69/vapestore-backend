@@ -11,12 +11,12 @@ pipeline {
 
     post {
         failure {
-      emailext to: 'duy.nguyenphuong@tpptechnology.com',
+      emailext to: 'trannguyenduchuy96@gmail.com',
             subject: "jenkins build:${currentBuild.currentResult}: ${env.JOB_NAME}",
             body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}\nMore Info can be found here: ${env.BUILD_URL}"
         }
         success {
-      emailext to: 'duy.nguyenphuong@tpptechnology.com',
+      emailext to: 'trannguyenduchuy96@gmail.com',
             subject: "jenkins build:${currentBuild.currentResult}: ${env.JOB_NAME}",
             body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}\nMore Info can be found here: ${env.BUILD_URL}"
         }
@@ -77,6 +77,7 @@ pipeline {
       steps {
         sshagent(credentials:['385f3aa3-e8c6-4336-9b68-50528da00149']) {
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 uname -a'
+          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker-compose up -d'
           echo 'Sucessfully deploy to production'
         }
