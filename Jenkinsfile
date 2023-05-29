@@ -77,9 +77,7 @@ pipeline {
       steps {
         sshagent(credentials:['385f3aa3-e8c6-4336-9b68-50528da00149']) {
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 uname -a'
-          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker-compose down'
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker-compose up -d'
-          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker logout'
           echo 'Sucessfully deploy to production'
         }
       }
