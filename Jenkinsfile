@@ -12,12 +12,12 @@ pipeline {
     post {
         failure {
       emailext to: 'huy.trannguyen@tpptechnology.com',
-            subject: "jenkins build:${currentBuild.currentResult}: ${env.JOB_NAME}",
+            subject: "Build Result:${currentBuild.currentResult} Job:${env.JOB_NAME}",
             body: '${SCRIPT, template="template-for-pipeline.template"}'
         }
         success {
       emailext to: 'huy.trannguyen@tpptechnology.com',
-            subject: "jenkins build:${currentBuild.currentResult}: ${env.JOB_NAME}",
+            subject: "Build Result:${currentBuild.currentResult} Job:${env.JOB_NAME}",
             body: '${SCRIPT, template="template-for-pipeline.template"}'
         }
     }
