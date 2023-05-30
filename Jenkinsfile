@@ -22,16 +22,16 @@ pipeline {
         }
     }
     stages {
-    ///     stage('Sonarqube Analysis') {
-    //   steps {
-    //     script {
-    //       def scannerHome = tool 'vapestore-backend'
-    //       withSonarQubeEnv() {
-    //         sh "${scannerHome}/bin/sonar-scanner"
-    //       }
-    //     }
-    //   }
-    //     }
+    stage('Sonarqube Analysis') {
+      steps {
+        script {
+          def scannerHome = tool 'vapestore-backend'
+          withSonarQubeEnv() {
+            sh "${scannerHome}/bin/sonar-scanner"
+          }
+        }
+      }
+    }
 
         stage('Quality Gate') {
       steps {
@@ -39,25 +39,25 @@ pipeline {
       }
         }
 
-    //     stage('Install dependencies') {
-    //   steps {
-    //     sh 'yarn install'
-    //   }
-    //     }
+        stage('Install dependencies') {
+      steps {
+        sh 'yarn install'
+      }
+        }
 
-    //     stage('Run test') {
-    //   steps {
-    //     sh 'yarn test'
-    //     echo 'Test done!'
-    //   }
-    //     }
+        stage('Run test') {
+      steps {
+        sh 'yarn test'
+        echo 'Test done!'
+      }
+        }
 
-    //     stage('Build image backend services') {
-    //   steps {
-    //     sh 'docker compose build'
-    //     echo 'Build complete!'
-    //   }
-    //     }
+        stage('Build image backend services') {
+      steps {
+        sh 'docker compose build'
+        echo 'Build complete!'
+      }
+        }
 
     stage('Login to Dockerhub') {
       steps {
@@ -66,12 +66,12 @@ pipeline {
       }
     }
 
-    //     stage('Push image to Dockerhub') {
-    //   steps {
-    //     sh 'docker push x2pher69/vapestore_backend:latest'
-    //     echo 'Push complete!'
-    //   }
-    //     }
+        stage('Push image to Dockerhub') {
+      steps {
+        sh 'docker push x2pher69/vapestore_backend:latest'
+        echo 'Push complete!'
+      }
+        }
 
         stage('Deploy to production') {
       steps {
