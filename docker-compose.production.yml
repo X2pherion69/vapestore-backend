@@ -3,9 +3,6 @@ services:
   postgresql:
     container_name: postgresql
     image: postgres:13-alpine
-    # cpus: 1
-    # cpu_count: 1
-    # mem_limit: 2g
     restart: unless-stopped
     environment:
       - POSTGRES_DB=postgres
@@ -23,41 +20,15 @@ services:
     container_name: flyway
     image: flyway/flyway
     mem_limit: 256mb
-    # cpus: 0.3
-    # cpu_count: 1
     depends_on:
       - postgresql
     volumes:
       - './sql:/flyway/sql'
     command: -url=jdbc:postgresql://postgresql:5432/postgres -user="user" -password="password" -mixed="true" -connectRetries=60 migrate
     networks:
-      - vape-service
-
-  vapestore_backend:
-    container_name: vapestore_backend
-    image: x2pher69/vapestore_backend:latest
-    # cpus: 2
-    # cpu_count: 1
-    # mem_limit: 2g
-    command: sh -c "yarn install && yarn start:dev"
-    environment:
-      NODE_ENV: production
-      PORT: 4000
-    volumes:
-      - .:/app
-      - /app/node_modules
-    depends_on:
-      - postgresql
-    ports:
-      - '4000:4000'
-    networks:
-      - vape-network
-      - vape-service
+      - vape-services
 
 networks:
   vape-service:
     name: vape-service
     external: false
-  vape-network:
-    name: vape-network
-    driver: bridge

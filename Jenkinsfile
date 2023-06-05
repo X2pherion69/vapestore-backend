@@ -66,9 +66,10 @@ pipeline {
       steps {
         sshagent(credentials:['385f3aa3-e8c6-4336-9b68-50528da00149']) {
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 uname -a'
-          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker-compose down'
-          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 cd vapestore-be'
-          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker-compose up -d --build'
+          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker compose down'
+          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker run --pull=always --rm -v /app -v /app/node_modules --expose 4000 --name vapestore_backend --network=vape-service -d x2pher69/vapestore_backend:latest'
+          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker compose up -d'
           echo 'Sucessfully deploy to production =================================!'
         }
       }

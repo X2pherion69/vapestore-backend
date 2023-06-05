@@ -1,26 +1,20 @@
-FROM node AS development
+# Base image
+FROM node:18
 
-WORKDIR /app
+# Create app directory
+WORKDIR /usr/src/app
 
-COPY package.json /app
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
 
+# Install app dependencies
 RUN yarn install
 
+# Bundle app source
 COPY . .
 
+# Creates a "dist" folder with the production build
 RUN yarn build
 
-FROM node AS production
-
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
-WORKDIR /app
-
-COPY package.json /app
-
-COPY --from=development /app .
-
-EXPOSE 4000
-
-CMD ["yarn", "start:prod"]
+# Start the server using the production build
+CMD [ "node", "dist/main" ]
