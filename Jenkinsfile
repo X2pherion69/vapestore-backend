@@ -54,12 +54,14 @@ pipeline {
 
         stage('Build image backend services') {
       steps {
+        script {
           docker.withRegistry('https://hub.docker.com/', 'dockerhub') {
           def customImage = docker.build('x2pher69/vapestore_backend:latest')
           customImage.push()
           // sh 'docker compose build'
           echo 'Build complete!'
           }
+        }
       }
         }
 
