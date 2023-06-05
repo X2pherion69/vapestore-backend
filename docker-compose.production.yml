@@ -1,7 +1,7 @@
 version: '3'
 services:
   postgresql:
-    container_name: postgresql-prod
+    container_name: postgresql
     image: postgres:13-alpine
     # cpus: 1
     # cpu_count: 1
@@ -34,12 +34,12 @@ services:
       - vape-service
 
   vapestore_backend:
-    container_name: vapestore_backend_prod
+    container_name: vapestore_backend
     image: x2pher69/vapestore_backend:latest
     # cpus: 2
     # cpu_count: 1
     # mem_limit: 2g
-    command: sh -c "yarn install && yarn start:prod"
+    command: sh -c "yarn install && yarn start:dev"
     environment:
       NODE_ENV: production
       PORT: 4000

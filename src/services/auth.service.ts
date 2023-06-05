@@ -1,16 +1,15 @@
-import { HttpException, Injectable, OnModuleInit } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as queryString from 'querystring';
 import { catchError, map } from 'rxjs/operators';
 import { KeycloakToken, KeycloakUserInfo as KeycloakUserInfoInterface } from '../models';
 import { HttpService } from '@nestjs/axios';
-import { CreateUserDto, LoginDTO } from '../dtos';
+import { CreateUserDto } from '../dtos';
 import { Observable } from 'rxjs';
-import { Cron } from '@nestjs/schedule';
 
 let tokenAdmin: string;
 @Injectable()
-export class AuthService implements OnModuleInit {
+export class AuthService {
   private keycloakLoginUri: string;
   private keycloakResponseType: string;
   private keycloakScope: string;
@@ -37,35 +36,35 @@ export class AuthService implements OnModuleInit {
     this.keycloakUserInfoUri = this._config.get('KEYCLOAK_USER_INFO');
   }
 
-  onModuleInit() {
-    this.getAdminAccessToken();
-  }
+  // onModuleInit() {
+  //   this.getAdminAccessToken();
+  // }
 
-  @Cron('* */10 * * * *')
-  getAdminAccessToken() {
-    this.getAdminPermission().subscribe({
-      next(value) {
-        tokenAdmin = value.access_token;
-      },
-    });
-  }
+  // @Cron('* */10 * * * *')
+  // getAdminAccessToken() {
+  //   this.getAdminPermission().subscribe({
+  //     next(value) {
+  //       tokenAdmin = value.access_token;
+  //     },
+  //   });
+  // }
 
-  loginAccess(body: LoginDTO) {
-    const params = {
-      grant_type: 'password',
-      client_id: this.keycloakClientId,
-      client_secret: this.keycloakClientSecret,
-      username: body.username,
-      password: body.password,
-      scope: 'openid',
-    };
-    return this._http.post(this.keycloakTokenUri, queryString.stringify(params), this.getContentType()).pipe(
-      map((res) => new KeycloakToken(res.data.access_token, res.data.refresh_token, res.data.expires_in, res.data.refresh_expires_in)),
-      catchError((e) => {
-        throw new HttpException(e.response.data, e.response.status);
-      }),
-    );
-  }
+  // loginAccess(body: LoginDTO) {
+  //   const params = {
+  //     grant_type: 'password',
+  //     client_id: this.keycloakClientId,
+  //     client_secret: this.keycloakClientSecret,
+  //     username: body.username,
+  //     password: body.password,
+  //     scope: 'openid',
+  //   };
+  //   return this._http.post(this.keycloakTokenUri, queryString.stringify(params), this.getContentType()).pipe(
+  //     map((res) => new KeycloakToken(res.data.access_token, res.data.refresh_token, res.data.expires_in, res.data.refresh_expires_in)),
+  //     catchError((e) => {
+  //       throw new HttpException(e.response.data, e.response.status);
+  //     }),
+  //   );
+  // }
 
   async getUserProfile(auth: string): Promise<KeycloakUserInfoInterface> {
     return await this._http.axiosRef
