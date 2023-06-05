@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { KeycloakConnectModule, AuthGuard, RoleGuard } from 'nest-keycloak-connect';
-import { ProductModule, UserModule, AuthModule, CommentModule } from './modules';
+import { ProductModule, UserModule, CommentModule } from './modules';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './services';
 import { CommentController, ProductController, UserController } from './controllers';
@@ -26,7 +26,6 @@ const keyCloakOptionsProvider = {
 @Module({
   imports: [
     KeycloakConnectModule.registerAsync(keyCloakOptionsProvider),
-    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
