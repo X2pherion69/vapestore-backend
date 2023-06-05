@@ -2,7 +2,7 @@ FROM node AS development
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json /app
 
 RUN yarn install
 
@@ -17,7 +17,7 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json /app
 
 COPY --from=development /app .
 

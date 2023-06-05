@@ -39,9 +39,9 @@ services:
     # cpus: 2
     # cpu_count: 1
     # mem_limit: 2g
-    command: sh -c "yarn install && yarn start:dev"
+    command: sh -c "yarn install && yarn start:prod"
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       PORT: 4000
     volumes:
       - .:/app
