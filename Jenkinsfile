@@ -45,7 +45,7 @@ pipeline {
     //   }
     //     }
 
-    //     stage('Run test') {
+    ///     stage('Run test') {
     //   steps {
     //     sh 'yarn test'
     //     echo 'Test done =================================!'
