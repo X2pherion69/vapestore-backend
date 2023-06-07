@@ -77,7 +77,7 @@ pipeline {
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker rm vapestore_backend'
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
           sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker compose up -d'
-          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker run -v /app -v /app/node_modules --expose 4000 --name vapestore_backend --env-file prod.env --network=vape-service -d x2pher69/vapestore_backend:latest'
+          sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 54.153.156.197 sudo docker run -v /app -v /app/node_modules -p 4000:4000 --name vapestore_backend --env-file prod.env --network=vape-service -d x2pher69/vapestore_backend:latest'
           echo 'Sucessfully deploy to production =================================!'
         }
       }
