@@ -59,15 +59,15 @@ pipeline {
       }
     }
 
-    //     stage('Build image backend services') {
-    //   steps {
-    //     script {
-    //         def customImage = docker.build('x2pher69/vapestore_backend:latest')
-    //         customImage.push()
-    //         echo 'Build complete =================================!'
-    //     }
-    //   }
-    //     }
+        stage('Build image backend services') {
+      steps {
+        script {
+            def customImage = docker.build('x2pher69/vapestore_backend:latest')
+            customImage.push()
+            echo 'Build complete =================================!'
+        }
+      }
+        }
 
 //     stage('Deploy to production') {
 //   steps {
